@@ -1,0 +1,6 @@
+/node_modules
+nodemon.json
+token.json
+data/language-links.json
+data/languages-list.json
+data/sole-languages.json
