@@ -4,7 +4,7 @@ This project contains code for a backend server that exposes a REST API for tran
 
 # Setup
 
-If you install Node.js installation is easy, just run the following commands.
+With Node.js installed, installation is easy, just run the following commands.
 
 ```
 $ git clone https://github.com/raghav-dwivedi/language-translator.git
@@ -13,6 +13,8 @@ $ npm install
 ```
 
 This will clone the repository to your local machine and then install all the dependencies required by the project.
+
+Along with the code you will need an SQL server running on your machine. I have used MySQL, you can also use MariaDB, Microsoft SQL Server, SQLite etc. The credentials of the SQL server need to be stored in .env file in following format. Change the dialect based on the type of SQL server you use. For example, dialect for MySql server is 'mysql'.
 
 Create a .env file in the root of your project directory, and set the following environment variables:
 
@@ -32,6 +34,8 @@ Google application credentials can be generated from IAM configuration at consol
 https://www.npmjs.com/package/@google-cloud/translate
 
 https://cloud.google.com/translate/docs/basic/translating-text
+
+https://sequelize.org/master/
 
 # Usage
 
@@ -74,7 +78,7 @@ POST http://localhost:${PORT}/translate
 
 - The codes for input and output languages are stored in 2 separate tables.
 - I decided to store the translation data in a single table instead of multiple tables for each and every combination of input and output languages as that would have required creation of an unsustainable number of tables based on the number of languages.
-- The translations are linked to the input and output languages through columns that store the ids of these languages in the input and ouptut tables.
+- The translations are linked to the input and output languages through columns that store the ids of these languages in the input and output tables.
 
 > You can find the schema for all the tables, in the models directory of the project.
 
@@ -107,11 +111,11 @@ POST http://localhost:${PORT}/translate
 
 ## Creation of Links Between languages
 
-- First I generated data that contained the major languages for each country. These languages and countries were taken from the data I compiled.
+- First, I generated data that contained the major languages for each country. These languages and countries were taken from the data I compiled.
 - After that I removed the countries and converted the data into an array of arrays of languages. I then removed the duplicate entries from this array of arrays.
 - Now the data that I had left contained a lot of arrays of languages of length 1, this implied these languages were the only main languages of some countries, hence linking them with other languages would result in unnecessary translations being stored.
 - For better linking of data, location of user is necessary. This would ensure that the translations stored are of the linked languages of the given country.
-- For example English and French are the most widely used languages of the world. If I were to store translations of all the languages of the countries where these languages are used, I would end up storing every single language in the data I compiled.
+- For example, English and French are the most widely used languages of the world. If I were to store translations of all the languages of the countries where these languages are used, I would end up storing every single language in the data I compiled.
 
 # Testing
 
