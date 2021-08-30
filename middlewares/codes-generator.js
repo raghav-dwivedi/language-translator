@@ -15,21 +15,19 @@ module.exports = async (req, res, next) => {
 		if (!check) {
 			// If check fails, list of languages is requested from the google translate service
 			const [languages] = await translate.getLanguages();
-			const codes = [];
-			languages.forEach((language) => {
-				codes.push(language.code);
-			});
 
 			// Populating inputLanguages and outputLanguages tables
 			console.log(
 				'Adding language codes to inputLanguages and outputLanguages tables.'
 			);
-			for (let i = 0; i < codes.length; i++) {
+			for (let i = 0; i < languages.length; i++) {
 				await InputLanguage.create({
-					code: codes[i],
+					code: languages[i].code,
+					name: languages[i].name,
 				});
 				await OutputLanguage.create({
-					code: codes[i],
+					code: languages[i].code,
+					name: languages[i].name,
 				});
 			}
 			next();

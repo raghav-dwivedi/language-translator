@@ -15,6 +15,10 @@ const InputLanguage = sequelize.define('inputLanguage', {
 		type: Sequelize.STRING,
 		allowNull: false,
 	},
+	name: {
+		type: Sequelize.STRING,
+		allowNull: false,
+	},
 });
 
 module.exports = InputLanguage;

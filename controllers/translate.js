@@ -40,24 +40,26 @@ exports.postTranslation = async (req, res, next) => {
 		// listed in the google translate API.
 		let inputLanguageCode,
 			check1 = false,
-			check2 = false;
+			check2 = false,
+			inputLanguagePk;
 
-		const [languages] = await translate.getLanguages();
+		var languages = await InputLanguage.findAll();
 
 		for (let i = 0; i < languages.length; i++) {
 			if (
 				languages[i].name.toLowerCase() === inputLanguage.toLowerCase() ||
 				languages[i].code.toLowerCase() === inputLanguage.toLowerCase()
 			) {
-				inputLanguage = languages[i].name;
-				inputLanguageCode = languages[i].code;
+				inputLanguage = languages[i].dataValues.name;
+				inputLanguageCode = languages[i].dataValues.code;
+				inputLanguagePk = languages[i].dataValues.id;
 				check1 = true;
 			}
 			if (
 				languages[i].name.toLowerCase() === outputLanguage.toLowerCase() ||
 				languages[i].code.toLowerCase() === outputLanguage.toLowerCase()
 			) {
-				outputLanguage = languages[i].name;
+				outputLanguage = languages[i].dataValues.name;
 				check2 = true;
 			}
 		}
@@ -84,37 +86,22 @@ exports.postTranslation = async (req, res, next) => {
 		}
 		console.log('Linked languages: ', outputLanguages);
 
-		// Finding the ID of input language specified, from the inputLanguages table.
-		let inputLanguagePk = await InputLanguage.findOne({
-			where: {
-				code: inputLanguageCode,
-			},
-		});
-		inputLanguagePk = inputLanguagePk.dataValues.id;
-
 		var results, output;
 		for (output of outputLanguages) {
-			let outputCode;
+			let outputCode, outputPk;
 
 			// Finding the details of outputLanguage from the languages array, which contains the list of
 			// languages provided by google translate
 			for (let i = 0; i < languages.length; i++) {
 				if (
-					languages[i].name.toLowerCase() === output.toLowerCase() ||
-					languages[i].code.toLowerCase() === output.toLowerCase()
+					languages[i].dataValues.name.toLowerCase() === output.toLowerCase() ||
+					languages[i].dataValues.code.toLowerCase() === output.toLowerCase()
 				) {
-					output = languages[i].name;
-					outputCode = languages[i].code;
+					output = languages[i].dataValues.name;
+					outputCode = languages[i].dataValues.code;
+					outputPk = languages[i].dataValues.id;
 				}
 			}
-
-			// Finding the ID of output language specified, from the outputLanguages table.
-			let outputPk = await OutputLanguage.findOne({
-				where: {
-					code: outputCode,
-				},
-			});
-			outputPk = outputPk.dataValues.id;
 
 			// Checking if the translation already exists in the database, otherwise
 			// translating input using google translate API
@@ -135,14 +122,11 @@ exports.postTranslation = async (req, res, next) => {
 			// otherwise storing the data of linked languages in the database
 			if (output.toLowerCase() === outputLanguage.toLowerCase()) {
 				if (translationStored1) {
-					results = [translationStored1.translatedString];
+					results = translationStored1.translatedString;
 					console.log('Translation results from db:', results);
 				} else if (translationStored2) {
-					results = [
-						'Translation results from db:',
-						translationStored2.originalString,
-					];
-					console.log(results);
+					results = translationStored2.originalString;
+					console.log('Translation results from db:', results);
 				} else {
 					[results] = await translate.translate(input, outputCode);
 					results = Array.isArray(results) ? results : [results];
