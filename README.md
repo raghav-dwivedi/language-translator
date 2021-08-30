@@ -113,6 +113,14 @@ POST http://localhost:${PORT}/translate
 - For better linking of data, location of user is necessary. This would ensure that the translations stored are of the linked languages of the given country.
 - For example English and French are the most widely used languages of the world. If I were to store translations of all the languages of the countries where these languages are used, I would end up storing every single language in the data I compiled.
 
+# Testing
+
+Run eslint as pretest, and tests written using mocha, chai and sinon, with the following commands:
+
+```
+$ npm test
+```
+
 # Future Improvements
 
 - Storing translations of linked languages based on the location of the user.
