@@ -5,13 +5,13 @@ const mysql = require('mysql2/promise');
 
 // Sequelize connection
 const sequelize = new Sequelize(
-	`${process.env.MYSQL_DATABASE}`,
-	`${process.env.MYSQL_USERNAME}`,
-	`${process.env.MYSQL_PASSWORD}`,
+	`${process.env.SQL_DATABASE}`,
+	`${process.env.SQL_USERNAME}`,
+	`${process.env.SQL_PASSWORD}`,
 	{
 		dialect: process.env.DIALECT,
 		host: process.env.HOST,
-		port: process.env.MYSQL_PORT,
+		port: process.env.SQL_PORT,
 		logging: false,
 	}
 );
@@ -20,10 +20,10 @@ const sequelize = new Sequelize(
 async function initialize() {
 	try {
 		const host = process.env.HOST;
-		const port = process.env.MYSQL_PORT;
-		const user = `${process.env.MYSQL_USERNAME}`;
-		const password = `${process.env.MYSQL_PASSWORD}`;
-		const database = `${process.env.MYSQL_DATABASE}`;
+		const port = process.env.SQL_PORT;
+		const user = `${process.env.SQL_USERNAME}`;
+		const password = `${process.env.SQL_PASSWORD}`;
+		const database = `${process.env.SQL_DATABASE}`;
 
 		const connection = await mysql.createConnection({
 			host,

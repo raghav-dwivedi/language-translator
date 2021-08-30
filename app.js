@@ -37,7 +37,7 @@ app.use((error, req, res, next) => {
 
 initialize()
 	.then(() => {
-		app.listen(8080);
+		app.listen(process.env.PORT);
 	})
 	.catch((err) => {
 		throw err;
