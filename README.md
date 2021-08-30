@@ -14,7 +14,7 @@ $ npm install
 
 This will clone the repository to your local machine and then install all the dependencies required by the project.
 
-Along with the code you will need an SQL server running on your machine. I have used MySQL, you can also use MariaDB, Oracle etc. The credentials of the SQL server need to be stored in .env file in following format. Change the dialect based on the type of SQL server you use. For example, dialect for MySql server is 'mysql'.
+Along with the code you will need an SQL server running on your machine. I have used MySQL, you can also use MariaDB, Microsoft SQL Server, SQLite etc. The credentials of the SQL server need to be stored in .env file in following format. Change the dialect based on the type of SQL server you use. For example, dialect for MySql server is 'mysql'.
 
 Create a .env file in the root of your project directory, and set the following environment variables:
 
