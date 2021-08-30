@@ -4,7 +4,6 @@ const detect = require('../util/detect');
 const languageLinker = require('../util/language-linker');
 
 const InputLanguage = require('../models/input-language');
-const OutputLanguage = require('../models/output-language');
 const Data = require('../models/data');
 
 const translate = new Translate();
@@ -38,8 +37,7 @@ exports.postTranslation = async (req, res, next) => {
 
 		// Checking if the input language and output language match any of the languages
 		// listed in the google translate API.
-		let inputLanguageCode,
-			check1 = false,
+		let check1 = false,
 			check2 = false,
 			inputLanguagePk;
 
@@ -51,7 +49,6 @@ exports.postTranslation = async (req, res, next) => {
 				languages[i].code.toLowerCase() === inputLanguage.toLowerCase()
 			) {
 				inputLanguage = languages[i].dataValues.name;
-				inputLanguageCode = languages[i].dataValues.code;
 				inputLanguagePk = languages[i].dataValues.id;
 				check1 = true;
 			}
