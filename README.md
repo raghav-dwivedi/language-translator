@@ -4,7 +4,7 @@ This project contains code for a backend server that exposes a REST API for tran
 
 # Setup
 
-If you install Node.js installation is easy, just run the following commands.
+With Node.js installed, installation is easy, just run the following commands.
 
 ```
 $ git clone https://github.com/raghav-dwivedi/language-translator.git
