@@ -1,3 +1,5 @@
+// Schema of the translation data stored in database
+
 const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database').sequelize;

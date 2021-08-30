@@ -1,7 +1,14 @@
+# Dependencies
 /node_modules
-nodemon.json
+
+# Environment variables
+.env
 token.json
+
+# Generated Data
 data/language-links.json
 data/languages-list.json
 data/sole-languages.json
+
+# Files for developer
 list of languages translated by google.txt

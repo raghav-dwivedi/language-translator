@@ -15,33 +15,33 @@ exports.postTranslation = async (req, res, next) => {
 		const input = req.body.input;
 		if (!input) {
 			let error = new Error();
-			error.statusCode = 204;
+			error.statusCode = 422;
 			error.message = 'Input cannot be null.';
-			throw Error(error);
+			throw error;
 		}
 		let inputLanguage = req.body.inputLanguage;
-
-		// If the inputLanguage is blank or equal to detect language, then the language of input is detected using google translate API
-		if (inputLanguage.toLowerCase() === 'detect language' || !inputLanguage) {
-			const detectedLanguage = await detect(input);
-			inputLanguage = detectedLanguage.language;
-		}
-
 		let outputLanguage = req.body.outputLanguage;
 		if (!outputLanguage) {
 			let error = new Error();
-			error.statusCode = 204;
+			error.statusCode = 422;
 			error.message = 'Output language must be specified.';
-			throw Error(error);
+			throw error;
+		}
+
+		// If the inputLanguage is blank or equal to detect language, then the language of input is detected using google translate API
+		var detectedLanguage;
+		if (inputLanguage.toLowerCase() === 'detect language' || !inputLanguage) {
+			detectedLanguage = await detect(input);
+			inputLanguage = detectedLanguage.language;
 		}
 
 		// Checking if the input language and output language match any of the languages listed in the google translate API.
 		let inputLanguageCode,
-			outputLanguageCode,
 			check1 = false,
 			check2 = false;
 
 		const [languages] = await translate.getLanguages();
+
 		for (let i = 0; i < languages.length; i++) {
 			if (
 				languages[i].name.toLowerCase() === inputLanguage.toLowerCase() ||
@@ -60,14 +60,29 @@ exports.postTranslation = async (req, res, next) => {
 			}
 		}
 		if (!check1) {
-			throw new Error('Invalid Input Language Selected');
+			let error = new Error();
+			error.statusCode = 422;
+			error.message = 'Invalid Input Language Selected';
+			throw error;
 		} else if (!check2) {
-			throw new Error('Invalid Output Language Selected');
+			let error = new Error();
+			error.statusCode = 422;
+			error.message = 'Invalid Output Language Selected';
+			throw error;
 		}
-		const outputLanguages = languageLinker(outputLanguage);
-		console.log(outputLanguages);
 
-		// Finding the IDs of languages inputted, from the input and output language table.
+		// Generating the linked languages using language-data.json
+		const outputLanguages = await languageLinker(outputLanguage);
+		for (let i = 0; i < outputLanguages.length; i++) {
+			if (outputLanguages[i].toLowerCase() === outputLanguage.toLowerCase()) {
+				let temp = outputLanguages[0];
+				outputLanguages[0] = outputLanguages[i];
+				outputLanguages[i] = temp;
+			}
+		}
+		console.log('Linked languages: ', outputLanguages);
+
+		// Finding the ID of input language specified, from the inputLanguages table.
 		let inputLanguagePk = await InputLanguage.findOne({
 			where: {
 				code: inputLanguageCode,
@@ -78,7 +93,8 @@ exports.postTranslation = async (req, res, next) => {
 		var results;
 		for (output of outputLanguages) {
 			let outputCode;
-			console.log(output);
+
+			// Finding the details of outputLanguage from the languages array, which contains the list of languages provided by google translate
 			for (let i = 0; i < languages.length; i++) {
 				if (
 					languages[i].name.toLowerCase() === output.toLowerCase() ||
@@ -86,9 +102,10 @@ exports.postTranslation = async (req, res, next) => {
 				) {
 					output = languages[i].name;
 					outputCode = languages[i].code;
-					check2 = true;
 				}
 			}
+
+			// Finding the ID of output language specified, from the outputLanguages table.
 			let outputPk = await OutputLanguage.findOne({
 				where: {
 					code: outputCode,
@@ -96,6 +113,7 @@ exports.postTranslation = async (req, res, next) => {
 			});
 			outputPk = outputPk.dataValues.id;
 
+			// Checking if the translation already exists in the database, otherwise translating input using google translate API
 			const translationStored1 = await Data.findOne({
 				where: {
 					originalString: input,
@@ -109,7 +127,8 @@ exports.postTranslation = async (req, res, next) => {
 				},
 			});
 
-			// Checking if the translation already exists in the database otherwise translating input using google translate API
+			// Sending response if the current output language matches the requested output language,
+			// otherwise storing the data of linked languages in the database
 			if (output.toLowerCase() === outputLanguage.toLowerCase()) {
 				if (translationStored1) {
 					results = [translationStored1.translatedString];
@@ -123,7 +142,6 @@ exports.postTranslation = async (req, res, next) => {
 				} else {
 					[results] = await translate.translate(input, outputCode);
 					results = Array.isArray(results) ? results : [results];
-					console.log('Translation results:', results);
 
 					// Storing the translation data in the Data table
 					await Data.create({
@@ -131,21 +149,40 @@ exports.postTranslation = async (req, res, next) => {
 						translatedString: results[0],
 						inputLanguageId: inputLanguagePk,
 						outputLanguageId: outputPk,
+					});
+					console.log('Translation results stored:', results[0]);
+				}
+
+				// Sending json response of the translated string
+				if (detectedLanguage) {
+					res.status(200).json({
+						translatedString: results[0],
+						detectedLanguage: inputLanguage,
+						outputLanguage: outputLanguage,
+					});
+				} else {
+					res.status(200).json({
+						translatedString: results[0],
+						inputLanguage: inputLanguage,
+						outputLanguage: outputLanguage,
 					});
 				}
 			} else {
 				if (!translationStored1 && !translationStored2) {
 					[results] = await translate.translate(input, outputCode);
 					results = Array.isArray(results) ? results : [results];
-					console.log('Linked languages translation results:', results);
 
-					// Storing the translation data in the Data table
+					// Storing the translation data of the linked languages in the Data table
 					await Data.create({
 						originalString: input,
 						translatedString: results[0],
 						inputLanguageId: inputLanguagePk,
 						outputLanguageId: outputPk,
 					});
+					console.log(
+						'Linked languages translation results stored:',
+						results[0]
+					);
 				} else {
 					if (translationStored1)
 						console.log(
@@ -160,14 +197,10 @@ exports.postTranslation = async (req, res, next) => {
 				}
 			}
 		}
-
-		// Sending json response of the translated string
-		await res.status(200).json({
-			translatedString: results[0],
-			inputLanguage: inputLanguage,
-			outputLanguage: outputLanguage,
-		});
 	} catch (error) {
-		console.log(error);
+		if (!error.statusCode) {
+			error.statusCode = 500;
+		}
+		next(error);
 	}
 };

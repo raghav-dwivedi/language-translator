@@ -1,4 +1,5 @@
-process.env.GOOGLE_APPLICATION_CREDENTIALS = './token.json';
+const path = require('path');
+require('dotenv').config();
 
 const express = require('express');
 
@@ -25,10 +26,19 @@ app.use(countryByLanguage);
 
 app.use(translate);
 
+app.use((error, req, res, next) => {
+	console.log(error);
+	const status = error.statusCode || 500;
+	const message = error.message;
+	res.status(status).json({
+		message: message,
+	});
+});
+
 initialize()
 	.then(() => {
 		app.listen(8080);
 	})
 	.catch((err) => {
-		console.log(err);
+		throw err;
 	});

@@ -1,3 +1,5 @@
+// Schema of the input language codes stored in the database.
+
 const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database').sequelize;
