@@ -32,7 +32,9 @@ Google application credentials can be generated from IAM configuration at consol
 ### Reference links:
 
 https://www.npmjs.com/package/@google-cloud/translate
+
 https://cloud.google.com/translate/docs/basic/translating-text
+
 https://sequelize.org/master/
 
 # Usage
