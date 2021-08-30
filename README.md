@@ -117,3 +117,7 @@ POST http://localhost:${PORT}/translate
 
 - Storing translations of linked languages based on the location of the user.
 - Currently there is no functionality to recreate helper data based on the changes in the language data. Temporary solution is through deletion of data/language-links.json, which would trigger re-creation of all 3 helper data files.
+
+# Issues
+
+- Currently languages like Malay, which are the major languages of multiple countries but is not the sole major language of any country, are getting their linked languages combined together and causing a few unnecessary translations getting stored. This issue can be resolved if location data is used to aid in determining the language links.
