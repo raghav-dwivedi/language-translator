@@ -4,13 +4,16 @@
   "description": "language translator using nodejs, google-translate api, using mysql as caching database",
   "main": "app.js",
   "scripts": {
-    "test": "mocha",
+    "devStart": "nodemon app.js --ignore data/",
+    "pretest": "eslint --ignore-path .gitignore .",
     "start": "node app.js",
-    "devStart": "nodemon app.js --ignore data/"
+    "test": "mocha"
   },
   "author": "raghav-dwivedi",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-strongloop": "^2.1.0",
     "nodemon": "^2.0.12"
   },
   "dependencies": {

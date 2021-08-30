@@ -90,7 +90,7 @@ exports.postTranslation = async (req, res, next) => {
 		});
 		inputLanguagePk = inputLanguagePk.dataValues.id;
 
-		var results;
+		var results, output;
 		for (output of outputLanguages) {
 			let outputCode;
 

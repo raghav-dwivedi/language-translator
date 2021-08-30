@@ -34,7 +34,7 @@ async function initialize() {
 		await connection.query(`CREATE DATABASE IF NOT EXISTS \`${database}\`;`);
 		return await sequelize.sync();
 	} catch (error) {
-		next(error);
+		console.log(error);
 	}
 }
 

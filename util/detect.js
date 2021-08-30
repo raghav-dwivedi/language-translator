@@ -12,6 +12,6 @@ module.exports = async (text) => {
 		const detectedLanguage = detect[0];
 		return detectedLanguage;
 	} catch (error) {
-		next(error);
+		console.log(error);
 	}
 };
