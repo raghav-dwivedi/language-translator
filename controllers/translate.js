@@ -28,14 +28,16 @@ exports.postTranslation = async (req, res, next) => {
 			throw error;
 		}
 
-		// If the inputLanguage is blank or equal to detect language, then the language of input is detected using google translate API
+		// If the inputLanguage is blank or equal to detect language, then the language of input is
+		// detected using google translate API
 		var detectedLanguage;
 		if (inputLanguage.toLowerCase() === 'detect language' || !inputLanguage) {
 			detectedLanguage = await detect(input);
 			inputLanguage = detectedLanguage.language;
 		}
 
-		// Checking if the input language and output language match any of the languages listed in the google translate API.
+		// Checking if the input language and output language match any of the languages
+		// listed in the google translate API.
 		let inputLanguageCode,
 			check1 = false,
 			check2 = false;
@@ -94,7 +96,8 @@ exports.postTranslation = async (req, res, next) => {
 		for (output of outputLanguages) {
 			let outputCode;
 
-			// Finding the details of outputLanguage from the languages array, which contains the list of languages provided by google translate
+			// Finding the details of outputLanguage from the languages array, which contains the list of
+			// languages provided by google translate
 			for (let i = 0; i < languages.length; i++) {
 				if (
 					languages[i].name.toLowerCase() === output.toLowerCase() ||
@@ -113,7 +116,8 @@ exports.postTranslation = async (req, res, next) => {
 			});
 			outputPk = outputPk.dataValues.id;
 
-			// Checking if the translation already exists in the database, otherwise translating input using google translate API
+			// Checking if the translation already exists in the database, otherwise
+			// translating input using google translate API
 			const translationStored1 = await Data.findOne({
 				where: {
 					originalString: input,

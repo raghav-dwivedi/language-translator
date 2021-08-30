@@ -9,8 +9,6 @@ module.exports = (req, res, next) => {
 	try {
 		// Check to see if the helper data already exists.
 
-		// To be added in the future: functionality to regenerate helper data if it is corrupted or if language-data.json changes.
-		// Currently, the only way to regenerate this data is by deletion of language-links.json
 		if (fs.existsSync(languagesByCountry)) {
 			next();
 		} else {

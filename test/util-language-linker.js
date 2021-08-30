@@ -15,7 +15,7 @@ describe('Language Linker Util', function () {
 		expect(output).to.equal('English');
 	});
 
-	it('should return an array of languages of length >1 if the outputLanguage is not a sole language', function () {
+	it('should return an array of length >1 if the outputLanguage is not a sole language', function () {
 		const outputLanguage = 'Malay';
 		expect(languageLinker(outputLanguage)).to.be.an('array');
 		expect(languageLinker(outputLanguage)).to.have.lengthOf.above(1);
