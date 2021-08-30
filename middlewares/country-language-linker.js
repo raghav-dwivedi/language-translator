@@ -5,7 +5,7 @@ const fs = require('fs');
 const countriesByLanguage = require('../data/language-data.json');
 const languagesByCountry = './data/language-links.json';
 
-module.exports = (res, req, next) => {
+module.exports = (req, res, next) => {
 	try {
 		// Check to see if the helper data already exists.
 
