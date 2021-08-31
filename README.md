@@ -84,13 +84,13 @@ POST http://localhost:${PORT}/translate
 
 &nbsp;
 
-### **inputLanguages**
+### **InputLanguages**
 
 | id  | code |  name   |      createdAt      |      updatedAt      |
 | :-: | :--: | :-----: | :-----------------: | :-----------------: |
 | 22  |  en  | English | 2021-08-28 08:51:04 | 2021-08-28 08:51:04 |
 
-### **outputLanguages**
+### **OutputLanguages**
 
 | id  | code |  name  |      createdAt      |      updatedAt      |
 | :-: | :--: | :----: | :-----------------: | :-----------------: |
