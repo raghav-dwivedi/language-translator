@@ -78,7 +78,7 @@ POST http://localhost:${PORT}/translate
 
 - The codes and names for input and output languages are stored in 2 separate tables.
 - I decided to store the translation data in a single table instead of multiple tables for each and every combination of input and output languages as that would have required creation of an unsustainable number of tables based on the number of languages.
-- The translations are linked to the input and output languages through columns that store the ids of these languages in the input and output tables.
+- The translations are linked to the input and output languages through foreign key to these languages in the input and output tables.
 
 > You can find the schema for all the tables, in the models directory of the project.
 
@@ -98,7 +98,7 @@ POST http://localhost:${PORT}/translate
 
 ### **Data Table**
 
-| originalString |  translatedString  | inputLanguageId | outputLanguageId |      createdAt      |      updatedAt      |
+| originalString |  translatedString  | InputLanguageId | OutputLanguageId |      createdAt      |      updatedAt      |
 | :------------: | :----------------: | :-------------: | :--------------: | :-----------------: | :-----------------: |
 |  Sample Data   | Exemple de données |       22        |        27        | 2021-08-28 12:09:12 | 2021-08-28 12:09:12 |
 
