@@ -58,6 +58,7 @@ exports.postTranslation = async (req, res, next) => {
 			) {
 				outputLanguage = languages[i].dataValues.name;
 				check2 = true;
+				console.log(outputLanguage, '  1');
 			}
 		}
 		if (!check1) {
@@ -100,18 +101,19 @@ exports.postTranslation = async (req, res, next) => {
 				}
 			}
 
+			console.log(output, outputPk, '  2');
 			// Checking if the translation already exists in the database, otherwise
 			// translating input using google translate API
 			const translationStored1 = await Data.findOne({
 				where: {
 					originalString: input,
-					outputLanguageId: outputPk,
+					OutputLanguageId: outputPk,
 				},
 			});
 			const translationStored2 = await Data.findOne({
 				where: {
 					translatedString: input,
-					inputLanguageId: inputLanguagePk,
+					InputLanguageId: outputPk,
 				},
 			});
 
@@ -129,12 +131,12 @@ exports.postTranslation = async (req, res, next) => {
 					results = Array.isArray(results) ? results : [results];
 
 					// Storing the translation data in the Data table
-					await Data.create({
+					const data = await Data.create({
 						originalString: input,
 						translatedString: results[0],
-						inputLanguageId: inputLanguagePk,
-						outputLanguageId: outputPk,
 					});
+					await data.setInputLanguage(inputLanguagePk);
+					await data.setOutputLanguage(outputPk);
 					console.log('Translation results stored:', results[0]);
 				}
 
@@ -158,12 +160,12 @@ exports.postTranslation = async (req, res, next) => {
 					results = Array.isArray(results) ? results : [results];
 
 					// Storing the translation data of the linked languages in the Data table
-					await Data.create({
+					const data = await Data.create({
 						originalString: input,
 						translatedString: results[0],
-						inputLanguageId: inputLanguagePk,
-						outputLanguageId: outputPk,
 					});
+					await data.setInputLanguage(inputLanguagePk);
+					await data.setOutputLanguage(outputPk);
 					console.log(
 						'Linked languages translation results stored:',
 						results[0]

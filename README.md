@@ -76,7 +76,7 @@ POST http://localhost:${PORT}/translate
 
 ## Database Schema
 
-- The codes for input and output languages are stored in 2 separate tables.
+- The codes and names for input and output languages are stored in 2 separate tables.
 - I decided to store the translation data in a single table instead of multiple tables for each and every combination of input and output languages as that would have required creation of an unsustainable number of tables based on the number of languages.
 - The translations are linked to the input and output languages through columns that store the ids of these languages in the input and output tables.
 
@@ -86,15 +86,15 @@ POST http://localhost:${PORT}/translate
 
 ### **inputLanguages**
 
-| id  | code |      createdAt      |      updatedAt      |
-| :-: | :--: | :-----------------: | :-----------------: |
-| 22  |  en  | 2021-08-28 08:51:04 | 2021-08-28 08:51:04 |
+| id  | code |  name   |      createdAt      |      updatedAt      |
+| :-: | :--: | :-----: | :-----------------: | :-----------------: |
+| 22  |  en  | English | 2021-08-28 08:51:04 | 2021-08-28 08:51:04 |
 
 ### **outputLanguages**
 
-| id  | code |      createdAt      |      updatedAt      |
-| :-: | :--: | :-----------------: | :-----------------: |
-| 27  |  fr  | 2021-08-28 08:51:04 | 2021-08-28 08:51:04 |
+| id  | code |  name  |      createdAt      |      updatedAt      |
+| :-: | :--: | :----: | :-----------------: | :-----------------: |
+| 27  |  fr  | French | 2021-08-28 08:51:04 | 2021-08-28 08:51:04 |
 
 ### **Data Table**
 

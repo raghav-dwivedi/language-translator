@@ -6,6 +6,10 @@ const initialize = require('./util/database').initialize;
 
 const translate = require('./routes/translate');
 
+const InputLanguage = require('./models/input-language');
+const OutputLanguage = require('./models/output-language');
+const Data = require('./models/data');
+
 const getLanguages = require('./middlewares/codes-generator');
 const countryByLanguage = require('./middlewares/country-language-linker');
 
@@ -33,6 +37,9 @@ app.use((error, req, res) => {
 		message: message,
 	});
 });
+
+Data.belongsTo(InputLanguage);
+Data.belongsTo(OutputLanguage);
 
 initialize()
 	.then(() => {

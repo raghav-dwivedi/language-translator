@@ -21,14 +21,6 @@ const Data = sequelize.define(
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
-		inputLanguageId: {
-			type: Sequelize.INTEGER,
-			allowNull: false,
-		},
-		outputLanguageId: {
-			type: Sequelize.INTEGER,
-			allowNull: false,
-		},
 	},
 	{ charset: 'utf8' }
 );

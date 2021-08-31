@@ -4,7 +4,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../util/database').sequelize;
 
-const InputLanguage = sequelize.define('inputLanguage', {
+const InputLanguage = sequelize.define('InputLanguage', {
 	id: {
 		type: Sequelize.INTEGER,
 		autoIncrement: true,
