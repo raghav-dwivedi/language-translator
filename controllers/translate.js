@@ -58,7 +58,6 @@ exports.postTranslation = async (req, res, next) => {
 			) {
 				outputLanguage = languages[i].dataValues.name;
 				check2 = true;
-				console.log(outputLanguage, '  1');
 			}
 		}
 		if (!check1) {
@@ -101,7 +100,6 @@ exports.postTranslation = async (req, res, next) => {
 				}
 			}
 
-			console.log(output, outputPk, '  2');
 			// Checking if the translation already exists in the database, otherwise
 			// translating input using google translate API
 			const translationStored1 = await Data.findOne({
